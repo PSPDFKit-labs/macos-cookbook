@@ -3,6 +3,7 @@ default_action :create
 
 property :username, String, name_property: true
 property :password, String, default: 'password'
+property :user_home, String
 property :autologin, [TrueClass]
 property :admin, [TrueClass]
 property :fullname, String
@@ -11,7 +12,7 @@ property :hidden, [true, false], default: false
 
 action_class do
   def user_home
-    ::File.join('/', 'Users', new_resource.username)
+    property_is_set?(:user_home) ? new_resource.user_home : ::File.join('/', 'Users', new_resource.username)
   end
 
   def user_hidden_home
