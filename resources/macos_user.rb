@@ -9,6 +9,7 @@ property :admin, [TrueClass]
 property :fullname, String
 property :groups, [Array, String]
 property :hidden, [true, false], default: false
+property :grant_secure_token, [true, false], default: true
 
 action_class do
   def user_home
@@ -74,6 +75,13 @@ action_class do
     users_output = shell_out!('/usr/bin/dscl', '.', '-list', '/users').stdout
     users_output.split("\n").include?(new_resource.username)
   end
+
+  def grant_secure_token?
+    return false unless new_resource.grant_secure_token
+
+    secure_token_status = shell_out(sysadminctl, '-secureTokenStatus', new_resource.username).stdout
+    secure_token_status.include?('DISABLED')
+  end
 end
 
 action :create do
@@ -85,6 +93,11 @@ action :create do
   execute "create home directory of user #{new_resource.username}" do
     command ['createhomedir', '-c', '-u', new_resource.username]
     not_if { ::File.exist?(user_home) }
+  end
+
+  execute "grant secure token to user #{new_resource.username}" do
+    command [sysadminctl, *admin_credentials, '-secureTokenOn', new_resource.username, '-password', new_resource.password]
+    only_if { grant_secure_token? }
   end
 
   sleep(0.5)
