@@ -78,7 +78,7 @@ end
 
 action :create do
   execute "add user #{new_resource.username}" do
-    command [sysadminctl, *admin_credentials, '-addUser', new_resource.username, *user_fullname, '-password', new_resource.password, admin_user]
+    command [sysadminctl, *admin_credentials, '-addUser', new_resource.username, *user_fullname, '-password', new_resource.password, '-home', user_home, admin_user]
     not_if { ::File.exist?(user_home) && user_already_exists? }
   end
 
