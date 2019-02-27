@@ -82,6 +82,11 @@ action :create do
     not_if { ::File.exist?(user_home) && user_already_exists? }
   end
 
+  execute "create home directory of user #{new_resource.username}" do
+    command ['createhomedir', '-c', '-u', new_resource.username]
+    not_if { ::File.exist?(user_home) }
+  end
+
   sleep(0.5)
 
   if new_resource.hidden == true
