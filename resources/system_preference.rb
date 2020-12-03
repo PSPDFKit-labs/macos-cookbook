@@ -1,4 +1,5 @@
 resource_name :system_preference
+provides :system_preference
 
 property :preference, Symbol, required: true, desired_state: false
 property :setting, String, required: true, desired_state: true

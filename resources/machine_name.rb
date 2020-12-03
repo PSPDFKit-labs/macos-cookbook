@@ -1,4 +1,5 @@
 resource_name :machine_name
+provides :machine_name
 
 deprecated 'The `machine_name` resource is deprecated, and will be removed in the release of v3.0 of the macOS cookbook.'
 

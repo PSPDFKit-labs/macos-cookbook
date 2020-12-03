@@ -1,4 +1,5 @@
 resource_name :plist
+provides :plist
 
 property :path, String, name_property: true, desired_state: true
 property :entry, String, desired_state: true

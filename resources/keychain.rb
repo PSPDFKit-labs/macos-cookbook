@@ -1,4 +1,5 @@
 resource_name :keychain
+provides :keychain
 default_action :create
 
 property :kc_file, String
